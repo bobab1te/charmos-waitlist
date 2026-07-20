@@ -26,14 +26,22 @@ const CLOUDS: Cloud[] = [
 type Sparkle = { top: string; left: string; size: number; color: string; depth: number; duration: number; delay: number }
 
 const SPARKLES: Sparkle[] = [
-  { top: '14%', left: '20%', size: 12, color: '#ffffff', depth: 20, duration: 2.8, delay: 0 },
-  { top: '10%', left: '72%', size: 9, color: '#ffffff', depth: 28, duration: 3.4, delay: 0.9 },
-  { top: '30%', left: '10%', size: 8, color: '#fff2c2', depth: 14, duration: 3.1, delay: 1.6 },
-  { top: '26%', left: '88%', size: 11, color: '#ffffff', depth: 24, duration: 2.6, delay: 0.4 },
-  { top: '46%', left: '6%', size: 10, color: '#ffffff', depth: 18, duration: 3.6, delay: 2.1 },
-  { top: '50%', left: '92%', size: 8, color: '#f6d9ea', depth: 22, duration: 2.9, delay: 1.1 },
-  { top: '62%', left: '16%', size: 9, color: '#ffffff', depth: 16, duration: 3.2, delay: 0.7 },
-  { top: '64%', left: '80%', size: 12, color: '#ffffff', depth: 30, duration: 2.5, delay: 1.9 },
+  { top: '12%', left: '20%', size: 20, color: '#ffffff', depth: 20, duration: 2.8, delay: 0 },
+  { top: '8%', left: '64%', size: 16, color: '#ffffff', depth: 28, duration: 3.4, delay: 0.9 },
+  { top: '18%', left: '82%', size: 22, color: '#ffffff', depth: 24, duration: 2.6, delay: 0.4 },
+  { top: '28%', left: '8%', size: 18, color: '#fff2c2', depth: 14, duration: 3.1, delay: 1.6 },
+  { top: '22%', left: '40%', size: 14, color: '#ffffff', depth: 16, duration: 3.0, delay: 1.2 },
+  { top: '38%', left: '92%', size: 17, color: '#ffffff', depth: 30, duration: 2.9, delay: 0.2 },
+  { top: '46%', left: '4%', size: 19, color: '#ffffff', depth: 18, duration: 3.6, delay: 2.1 },
+  { top: '52%', left: '70%', size: 15, color: '#f6d9ea', depth: 22, duration: 2.9, delay: 1.1 },
+  { top: '58%', left: '30%', size: 20, color: '#ffffff', depth: 26, duration: 3.3, delay: 0.6 },
+  { top: '62%', left: '14%', size: 16, color: '#ffffff', depth: 16, duration: 3.2, delay: 0.7 },
+  { top: '66%', left: '86%', size: 22, color: '#ffffff', depth: 30, duration: 2.5, delay: 1.9 },
+  { top: '74%', left: '52%', size: 15, color: '#e0d4f7', depth: 20, duration: 2.7, delay: 1.5 },
+  { top: '78%', left: '22%', size: 18, color: '#ffffff', depth: 24, duration: 3.5, delay: 0.3 },
+  { top: '82%', left: '76%', size: 16, color: '#ffffff', depth: 18, duration: 2.8, delay: 2.3 },
+  { top: '4%', left: '38%', size: 14, color: '#ffffff', depth: 22, duration: 3.1, delay: 1.8 },
+  { top: '90%', left: '44%', size: 17, color: '#ffffff', depth: 26, duration: 2.6, delay: 0.5 },
 ]
 
 function CloudShape({ cloud }: { cloud: Cloud }) {
@@ -77,7 +85,14 @@ function Sparkle({ sparkle, pointer }: { sparkle: Sparkle; pointer: { x: number;
         transform: `translate(${pointer.x * -sparkle.depth}px, ${pointer.y * -sparkle.depth}px)`,
       }}
     >
-      <svg width={sparkle.size} height={sparkle.size} viewBox="0 0 24 24" fill={sparkle.color} aria-hidden="true">
+      <svg
+        width={sparkle.size}
+        height={sparkle.size}
+        viewBox="0 0 24 24"
+        fill={sparkle.color}
+        aria-hidden="true"
+        style={{ filter: `drop-shadow(0 0 6px ${sparkle.color}) drop-shadow(0 0 3px rgba(255,255,255,0.9))` }}
+      >
         <path d="M12 0 L14.2 9.8 L24 12 L14.2 14.2 L12 24 L9.8 14.2 L0 12 L9.8 9.8 Z" />
       </svg>
     </div>

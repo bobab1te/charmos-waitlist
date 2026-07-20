@@ -202,12 +202,12 @@ body {
 @keyframes charm-twinkle {
   0%,
   100% {
-    opacity: 0.2;
-    transform: scale(0.8);
+    opacity: 0.55;
+    transform: scale(0.88);
   }
   50% {
     opacity: 1;
-    transform: scale(1.2);
+    transform: scale(1.25);
   }
 }
 
