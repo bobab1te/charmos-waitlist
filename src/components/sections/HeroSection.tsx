@@ -1,17 +1,25 @@
 import { ChevronDown } from 'lucide-react'
 import { HeroDecor } from '#/components/HeroDecor'
+import { usePointerParallax } from '#/hooks/usePointerParallax'
 
 function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
 }
 
 export function HeroSection() {
+  const pointer = usePointerParallax()
+
   return (
     <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 py-16 text-center">
       <HeroDecor />
 
       <div className="relative z-10 flex flex-col items-center rounded-3xl px-6 py-8 backdrop-blur-[2px] sm:px-10">
-        <img src="/charm-cloud.png" alt="CharmOS" className="mb-6 h-32 w-32" />
+        <div
+          className="mb-6 transition-transform duration-300 ease-out"
+          style={{ transform: `translate(${pointer.x * 7}px, ${pointer.y * 6}px)` }}
+        >
+          <img src="/charm-cloud.png" alt="CharmOS" className="charm-wobble h-32 w-32" />
+        </div>
 
         <h1 className="font-display text-3xl font-bold text-foreground sm:text-5xl">CharmOS</h1>
 

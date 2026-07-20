@@ -211,6 +211,20 @@ body {
   }
 }
 
+@keyframes charm-wobble {
+  0%,
+  100% {
+    transform: rotate(-3deg) scale(1);
+  }
+  50% {
+    transform: rotate(3deg) scale(1.05);
+  }
+}
+
+.charm-wobble {
+  animation: charm-wobble 5s ease-in-out infinite;
+}
+
 .charm-float {
   animation-name: charm-float;
   animation-timing-function: ease-in-out;
@@ -268,7 +282,8 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .charm-float,
-  .charm-twinkle {
+  .charm-twinkle,
+  .charm-wobble {
     animation: none;
   }
 }
