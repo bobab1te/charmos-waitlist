@@ -1,0 +1,159 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import '@fontsource/plus-jakarta-sans';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* CharmOS palette — soft pinks, lavender, buttery yellow, sky blue */
+  --charm-pink: #ffd9e6;
+  --charm-pink-deep: #f6a8c4;
+  --charm-lavender: #d9c8f5;
+  --charm-lavender-deep: #b79cea;
+  --charm-blue: #c3ddf5;
+  --charm-blue-deep: #9cc2ea;
+  --charm-yellow: #fff2c2;
+  --charm-beige: #f8f1ea;
+  --charm-ink: #3a2e42;
+  --charm-ink-soft: #6b5b73;
+
+  --accent: #e8608f;
+  --accent-soft: #f6a8c4;
+  --accent-foreground: #fff8fb;
+
+  --surface: rgba(255, 255, 255, 0.55);
+  --surface-strong: rgba(255, 255, 255, 0.72);
+  --surface-border: rgba(255, 255, 255, 0.6);
+  --surface-shadow: rgba(120, 80, 130, 0.14);
+
+  --bg-base: #fbf3f6;
+
+  --background: oklch(1 0 0);
+  --foreground: #3a2e42;
+  --primary: #e8608f;
+  --primary-foreground: #fff8fb;
+  --muted-foreground: #8a7a8f;
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: rgba(58, 46, 66, 0.1);
+  --input: rgba(58, 46, 66, 0.14);
+  --ring: #e8608f;
+  --radius: 1.1rem;
+}
+
+.dark {
+  --charm-ink: #f3e9f7;
+  --charm-ink-soft: #d3c2da;
+  --accent: #f284ab;
+  --surface: rgba(36, 24, 44, 0.55);
+  --surface-strong: rgba(36, 24, 44, 0.74);
+  --surface-border: rgba(255, 255, 255, 0.08);
+  --surface-shadow: rgba(0, 0, 0, 0.35);
+  --bg-base: #1a1220;
+  --background: #1a1220;
+  --foreground: #f3e9f7;
+  --primary: #f284ab;
+  --primary-foreground: #2a1220;
+  --destructive: oklch(0.396 0.141 25.723);
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.14);
+  --ring: #f284ab;
+}
+
+@theme inline {
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 6px);
+  --radius-md: calc(var(--radius) - 3px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 6px);
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--charm-ink);
+  font-family: var(--font-sans);
+  background-color: var(--bg-base);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---------- Mesh gradient backdrop (matches CharmOS) ---------- */
+
+.charm-mesh {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background-color: var(--bg-base);
+  background-image:
+    radial-gradient(38% 32% at 8% 12%, color-mix(in oklab, var(--charm-pink) 85%, transparent), transparent),
+    radial-gradient(42% 38% at 88% 8%, color-mix(in oklab, var(--charm-lavender) 80%, transparent), transparent),
+    radial-gradient(36% 34% at 92% 62%, color-mix(in oklab, var(--charm-blue) 78%, transparent), transparent),
+    radial-gradient(44% 40% at 12% 88%, color-mix(in oklab, var(--charm-yellow) 70%, transparent), transparent),
+    radial-gradient(50% 45% at 50% 50%, color-mix(in oklab, var(--charm-pink-deep) 30%, transparent), transparent);
+  filter: saturate(1.05);
+}
+
+.dark .charm-mesh {
+  background-image:
+    radial-gradient(38% 32% at 8% 12%, color-mix(in oklab, var(--charm-lavender-deep) 32%, transparent), transparent),
+    radial-gradient(42% 38% at 88% 8%, color-mix(in oklab, var(--charm-pink-deep) 26%, transparent), transparent),
+    radial-gradient(36% 34% at 92% 62%, color-mix(in oklab, var(--charm-blue-deep) 24%, transparent), transparent),
+    radial-gradient(44% 40% at 12% 88%, color-mix(in oklab, var(--charm-yellow) 14%, transparent), transparent),
+    radial-gradient(50% 45% at 50% 50%, color-mix(in oklab, var(--charm-pink-deep) 12%, transparent), transparent);
+}
+
+.charm-grain {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+.dark .charm-grain {
+  opacity: 0.35;
+  mix-blend-mode: soft-light;
+}
+
+.charm-glass {
+  background: linear-gradient(165deg, var(--surface-strong), var(--surface));
+  border: 1px solid var(--surface-border);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 20px 44px var(--surface-shadow),
+    0 4px 14px rgba(58, 46, 66, 0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.dark .charm-glass {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 20px 44px var(--surface-shadow),
+    0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+}
