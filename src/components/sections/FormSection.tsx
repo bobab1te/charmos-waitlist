@@ -2,6 +2,8 @@ import { useState, type FormEvent } from 'react'
 import { CheckCircle2 } from 'lucide-react'
 import { supabase } from '#/lib/supabase'
 import { MultiSelectDropdown } from '#/components/MultiSelectDropdown'
+import { SearchableSelect } from '#/components/SearchableSelect'
+import { COUNTRIES } from '#/lib/countries'
 
 const REASON_OPTIONS = [
   { value: 'lose_track', label: 'I lose track of brand deals' },
@@ -35,7 +37,6 @@ const CREATOR_TYPE_OPTIONS = [
 ]
 
 const NICHE_OPTIONS = [
-  { value: '', label: 'Select one…' },
   { value: 'beauty', label: 'Beauty' },
   { value: 'fashion', label: 'Fashion' },
   { value: 'fitness', label: 'Fitness & Wellness' },
@@ -58,7 +59,7 @@ export function FormSection() {
   const [creatorType, setCreatorType] = useState('')
   const [followerRange, setFollowerRange] = useState('')
   const [location, setLocation] = useState('')
-  const [niche, setNiche] = useState('')
+  const [niches, setNiches] = useState<string[]>([])
   const [nicheOtherText, setNicheOtherText] = useState('')
   const [platforms, setPlatforms] = useState<string[]>([])
   const [newsletterOptIn, setNewsletterOptIn] = useState(false)
@@ -71,6 +72,10 @@ export function FormSection() {
     setReasons((prev) => (prev.includes(value) ? prev.filter((r) => r !== value) : [...prev, value]))
   }
 
+  function toggleNiche(value: string) {
+    setNiches((prev) => (prev.includes(value) ? prev.filter((n) => n !== value) : [...prev, value]))
+  }
+
   function togglePlatform(platform: string) {
     setPlatforms((prev) => (prev.includes(platform) ? prev.filter((p) => p !== platform) : [...prev, platform]))
   }
@@ -81,30 +86,36 @@ export function FormSection() {
     setErrorMessage('')
 
     const reasonLabels = reasons.map((value) => REASON_OPTIONS.find((o) => o.value === value)?.label ?? value)
-    const nicheValue = niche === 'other' ? nicheOtherText : (NICHE_OPTIONS.find((o) => o.value === niche)?.label ?? null)
+    const nicheLabels = niches.map((value) => NICHE_OPTIONS.find((o) => o.value === value)?.label ?? value)
 
-    const { error } = await supabase.from('waitlist').insert({
-      email,
-      purpose: reasonLabels.length ? reasonLabels : null,
-      purpose_other: reasons.includes('other') && reasonOtherText ? reasonOtherText : null,
-      creator_type: creatorType || null,
-      follower_range: followerRange || null,
-      location: location || null,
-      niche: nicheValue || null,
-      platforms: platforms.length ? platforms : null,
-      newsletter_opt_in: newsletterOptIn,
-      suggestions: suggestions || null,
-    })
+    try {
+      const { error } = await supabase.from('waitlist').insert({
+        email,
+        purpose: reasonLabels.length ? reasonLabels : null,
+        purpose_other: reasons.includes('other') && reasonOtherText ? reasonOtherText : null,
+        creator_type: creatorType || null,
+        follower_range: followerRange || null,
+        location: location || null,
+        niche: nicheLabels.length ? nicheLabels : null,
+        niche_other: niches.includes('other') && nicheOtherText ? nicheOtherText : null,
+        platforms: platforms.length ? platforms : null,
+        newsletter_opt_in: newsletterOptIn,
+        suggestions: suggestions || null,
+      })
 
-    if (error) {
+      if (error) {
+        setStatus('error')
+        setErrorMessage(
+          error.code === '23505' ? "You're already on the list!" : 'Something went wrong. Please try again.',
+        )
+        return
+      }
+
+      setStatus('done')
+    } catch {
       setStatus('error')
-      setErrorMessage(
-        error.code === '23505' ? "You're already on the list!" : 'Something went wrong. Please try again.',
-      )
-      return
+      setErrorMessage('Network error — please check your connection and try again.')
     }
-
-    setStatus('done')
   }
 
   return (
@@ -112,7 +123,7 @@ export function FormSection() {
       <div className="charm-glass w-full max-w-lg rounded-xl p-8 text-center sm:p-10">
         <img src="/charm-cloud.png" alt="CharmOS" className="mx-auto mb-4 h-14 w-14" />
 
-        <h1 className="text-2xl font-semibold text-foreground sm:text-3xl">CharmOS</h1>
+        <h1 className="font-display text-2xl font-semibold text-foreground sm:text-3xl">CharmOS</h1>
         <p className="mt-2 text-sm text-muted-foreground sm:text-base">
           Be the first to know when we launch. Join the waitlist below.
         </p>
@@ -189,29 +200,23 @@ export function FormSection() {
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <label className="flex flex-col gap-1">
                 <span className="text-sm font-medium text-foreground">Location</span>
-                <input
-                  type="text"
+                <SearchableSelect
+                  options={COUNTRIES}
                   value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  placeholder="Country"
-                  className="w-full rounded-lg border border-input bg-background/70 px-4 py-2.5 text-sm text-foreground outline-none ring-ring/50 placeholder:text-muted-foreground focus:ring-2"
+                  onChange={setLocation}
+                  placeholder="Select a country…"
                 />
               </label>
 
-              <label className="flex flex-col gap-1">
+              <div className="flex flex-col gap-1">
                 <span className="text-sm font-medium text-foreground">Your niche</span>
-                <select
-                  value={niche}
-                  onChange={(e) => setNiche(e.target.value)}
-                  className="w-full rounded-lg border border-input bg-background/70 px-4 py-2.5 text-sm text-foreground outline-none ring-ring/50 focus:ring-2"
-                >
-                  {NICHE_OPTIONS.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-                {niche === 'other' && (
+                <MultiSelectDropdown
+                  options={NICHE_OPTIONS}
+                  selected={niches}
+                  onToggle={toggleNiche}
+                  placeholder="Select all that apply…"
+                />
+                {niches.includes('other') && (
                   <input
                     type="text"
                     value={nicheOtherText}
@@ -220,7 +225,7 @@ export function FormSection() {
                     className="mt-1 rounded-lg border border-input bg-background/70 px-4 py-2 text-sm text-foreground outline-none ring-ring/50 placeholder:text-muted-foreground focus:ring-2"
                   />
                 )}
-              </label>
+              </div>
             </div>
 
             <div className="flex flex-col gap-2">

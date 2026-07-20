@@ -4,6 +4,22 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@font-face {
+  font-family: 'Visby CF';
+  src: url('/fonts/visby-cf/VisbyCF-DemiBold.otf') format('opentype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Visby CF Bold';
+  src: url('/fonts/visby-cf/VisbyCF-Bold.otf') format('opentype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* CharmOS palette — soft pinks, lavender, buttery yellow, sky blue */
   --charm-pink: #ffd9e6;
@@ -61,6 +77,7 @@
 
 @theme inline {
   --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Visby CF', ui-sans-serif, system-ui, sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
@@ -146,6 +163,24 @@ body {
 }
 
 .dark .charm-glass {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 20px 44px var(--surface-shadow),
+    0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+/* Solid-ish variant for popovers/dropdowns floating over other glass panels,
+   where the regular translucent .charm-glass would compound and wash out text. */
+.charm-glass-solid {
+  background: color-mix(in oklab, var(--background) 97%, var(--surface-strong));
+  border: 1px solid var(--surface-border);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 20px 44px var(--surface-shadow),
+    0 4px 14px rgba(58, 46, 66, 0.06);
+}
+
+.dark .charm-glass-solid {
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.06) inset,
     0 20px 44px var(--surface-shadow),

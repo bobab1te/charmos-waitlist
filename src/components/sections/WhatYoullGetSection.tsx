@@ -12,7 +12,7 @@ const FEATURES: { icon: LucideIcon; text: string }[] = [
 export function WhatYoullGetSection() {
   return (
     <section id="what-youll-get" className="relative mx-auto max-w-3xl px-4 py-24">
-      <h2 className="text-center text-2xl font-semibold text-foreground sm:text-3xl">What you'll get</h2>
+      <h2 className="font-display text-center text-2xl font-semibold text-foreground sm:text-3xl">What you'll get</h2>
 
       <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
         {FEATURES.map(({ icon: Icon, text }) => (

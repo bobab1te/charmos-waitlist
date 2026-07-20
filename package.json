@@ -27,6 +27,7 @@
     "tailwindcss": "^4.1.18",
     "tw-animate-css": "^1.3.6",
     "typescript": "^6.0.2",
+    "vercel": "^56.4.0",
     "vite": "^8.0.0"
   }
 }

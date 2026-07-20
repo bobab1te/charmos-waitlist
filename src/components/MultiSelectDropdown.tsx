@@ -49,7 +49,7 @@ export function MultiSelectDropdown({
       </button>
 
       {open && (
-        <div className="charm-glass absolute z-20 mt-1 max-h-64 w-full overflow-y-auto rounded-lg p-2">
+        <div className="charm-glass-solid absolute z-20 mt-1 max-h-64 w-full overflow-y-auto rounded-lg p-2">
           {options.map((opt) => {
             const checked = selected.includes(opt.value)
             return (

@@ -13,7 +13,7 @@ export function HeroSection() {
       <div className="relative z-10 flex flex-col items-center rounded-3xl px-6 py-8 backdrop-blur-[2px] sm:px-10">
         <img src="/charm-cloud.png" alt="CharmOS" className="mb-6 h-32 w-32" />
 
-        <h1 className="text-3xl font-bold text-foreground sm:text-5xl">CharmOS</h1>
+        <h1 className="font-display text-3xl font-bold text-foreground sm:text-5xl">CharmOS</h1>
 
         <p className="mt-6 max-w-2xl text-2xl font-semibold text-foreground sm:text-4xl">
           Your mini manager for everything content creation.

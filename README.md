@@ -5,9 +5,12 @@ CharmOS's existing design tokens (Tailwind v4 + the CharmOS pink/lavender palett
 so it can be dropped into the main CharmOS repo later as a route.
 
 This lives outside the CharmOS repo for now because it was built on a different
-machine than the one with the full CharmOS project cloned. It shares the same
-Supabase project (`VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` in `.env`), so
-signups collected here will already be in the right place once merged.
+machine than the one with the full CharmOS project cloned. It uses its own
+**dedicated** Supabase project (`VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`
+in `.env`) — deliberately separate from the main CharmOS app's project, so
+waitlist experimentation never touches production data. When merging into
+CharmOS later, either keep this as a separate project or migrate the data
+into the main app's database at that point.
 
 ## Setup
 
@@ -20,8 +23,8 @@ Runs on http://localhost:3001.
 
 ## One-time Supabase setup
 
-Run this once in the Supabase SQL editor (Dashboard → SQL Editor) for the project
-at `jcrzlayljuuhxdfzycvp`:
+Run this once in the Supabase SQL editor (Dashboard → SQL Editor) for the
+dedicated waitlist project at `lduyinzizvqebtievjgl`:
 
 ```sql
 create table if not exists waitlist (
@@ -32,7 +35,8 @@ create table if not exists waitlist (
   creator_type text,
   follower_range text,
   location text,
-  niche text,
+  niche text[],
+  niche_other text,
   platforms text[],
   newsletter_opt_in boolean not null default false,
   suggestions text,
@@ -60,22 +64,28 @@ alter table waitlist add column if not exists purpose_other text;
 alter table waitlist add column if not exists creator_type text;
 alter table waitlist add column if not exists follower_range text;
 alter table waitlist add column if not exists location text;
-alter table waitlist add column if not exists niche text;
+alter table waitlist add column if not exists niche_other text;
 alter table waitlist add column if not exists platforms text[];
 alter table waitlist add column if not exists newsletter_opt_in boolean not null default false;
 alter table waitlist add column if not exists suggestions text;
 
 alter table waitlist add column if not exists purpose text[];
+alter table waitlist add column if not exists niche text[];
 ```
 
 This is safe to run any number of times — `if not exists` skips columns that
-are already there. If `purpose` already exists as a plain `text` column from an
-earlier version, convert it to an array instead of adding it fresh:
+are already there. If `purpose` or `niche` already exist as plain `text`
+columns from an earlier version, convert them to arrays instead of adding
+them fresh:
 
 ```sql
 alter table waitlist
   alter column purpose type text[]
   using case when purpose is null then null else array[purpose] end;
+
+alter table waitlist
+  alter column niche type text[]
+  using case when niche is null then null else array[niche] end;
 ```
 
 ## Merging into CharmOS later
@@ -85,10 +95,13 @@ alter table waitlist
    - `src/components/RevealSection.tsx`
    - `src/components/SunGlow.tsx`
    - `src/components/MultiSelectDropdown.tsx`
+   - `src/components/SearchableSelect.tsx`
    - `src/components/sections/` (HeroSection, BioSection, WhatYoullGetSection, FormSection)
    - `src/hooks/useRevealOnScroll.ts`
    - `src/hooks/useScrollProgress.ts`
-2. Copy `public/charm-cloud.png` into `CharmOS/public/`.
+   - `src/lib/countries.ts`
+2. Copy `public/charm-cloud.png` and `public/bio-photo.jpg` into `CharmOS/public/`,
+   and the `public/fonts/visby-cf/` folder if not already present there.
 3. Create a new route file, e.g. `CharmOS/src/routes/waitlist.tsx`:
 
    ```tsx
