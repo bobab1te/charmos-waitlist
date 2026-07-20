@@ -1,3 +1,4 @@
+import { Heart, Hash, Sparkles as SparklesIcon } from 'lucide-react'
 import { useScrollProgress } from '#/hooks/useScrollProgress'
 import { usePointerParallax } from '#/hooks/usePointerParallax'
 
@@ -43,6 +44,141 @@ const SPARKLES: Sparkle[] = [
   { top: '4%', left: '38%', size: 14, color: '#ffffff', depth: 22, duration: 3.1, delay: 1.8 },
   { top: '90%', left: '44%', size: 17, color: '#ffffff', depth: 26, duration: 2.6, delay: 0.5 },
 ]
+
+type Pill = {
+  top?: string
+  bottom?: string
+  left?: string
+  right?: string
+  label: string
+  icon: typeof Heart
+  bg: string
+  textColor: string
+  rotate: number
+  depth: number
+  duration: number
+  delay: number
+  driftX: number
+  driftY: number
+}
+
+const PILLS: Pill[] = [
+  {
+    top: '40%',
+    left: '4%',
+    label: 'creator-first',
+    icon: Heart,
+    bg: 'var(--charm-pink-deep)',
+    textColor: 'var(--charm-ink)',
+    rotate: -7,
+    depth: 16,
+    duration: 15,
+    delay: 0.4,
+    driftX: 10,
+    driftY: -8,
+  },
+  {
+    top: '44%',
+    right: '3%',
+    label: 'on-brand',
+    icon: Hash,
+    bg: 'var(--charm-blue-deep)',
+    textColor: 'var(--charm-ink)',
+    rotate: 6,
+    depth: 20,
+    duration: 17,
+    delay: 1.4,
+    driftX: -10,
+    driftY: -6,
+  },
+  {
+    bottom: '20%',
+    left: '6%',
+    label: 'organized',
+    icon: SparklesIcon,
+    bg: 'var(--charm-yellow)',
+    textColor: 'var(--charm-ink)',
+    rotate: 5,
+    depth: 14,
+    duration: 16,
+    delay: 0.9,
+    driftX: 8,
+    driftY: 8,
+  },
+]
+
+const BURST = {
+  bottom: '15%',
+  right: '5%',
+  label: 'Effortless',
+  bg: 'var(--charm-lavender-deep)',
+  textColor: '#fff8fb',
+  rotate: -8,
+  depth: 22,
+  duration: 18,
+  delay: 0.2,
+  driftX: -8,
+  driftY: 10,
+}
+
+function Pill({ pill }: { pill: Pill }) {
+  const Icon = pill.icon
+  return (
+    <div className="absolute" style={{ top: pill.top, bottom: pill.bottom, left: pill.left, right: pill.right }}>
+      <div
+        className="charm-float"
+        style={
+          {
+            animationDuration: `${pill.duration}s`,
+            animationDelay: `${pill.delay}s`,
+            '--drift-x': `${pill.driftX}px`,
+            '--drift-y': `${pill.driftY}px`,
+          } as React.CSSProperties
+        }
+      >
+        <div
+          className="flex items-center gap-1.5 rounded-full px-3.5 py-2 shadow-lg"
+          style={{ background: pill.bg, color: pill.textColor, transform: `rotate(${pill.rotate}deg)` }}
+        >
+          <Icon className="h-3.5 w-3.5 shrink-0" strokeWidth={2.5} />
+          <span className="whitespace-nowrap text-xs font-bold sm:text-sm">{pill.label}</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function Burst() {
+  return (
+    <div className="absolute" style={{ top: BURST.top, bottom: BURST.bottom, left: BURST.left, right: BURST.right }}>
+      <div
+        className="charm-float"
+        style={
+          {
+            animationDuration: `${BURST.duration}s`,
+            animationDelay: `${BURST.delay}s`,
+            '--drift-x': `${BURST.driftX}px`,
+            '--drift-y': `${BURST.driftY}px`,
+          } as React.CSSProperties
+        }
+      >
+        <div
+          className="relative flex h-24 w-24 items-center justify-center"
+          style={{ transform: `rotate(${BURST.rotate}deg)` }}
+        >
+          <div className="absolute inset-0 rounded-[30%]" style={{ background: BURST.bg }} />
+          <div className="absolute inset-0 rotate-45 rounded-[30%]" style={{ background: BURST.bg }} />
+          <span
+            className="relative z-10 font-display text-sm font-bold italic"
+            style={{ color: BURST.textColor }}
+          >
+            {BURST.label}
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 function CloudShape({ cloud }: { cloud: Cloud }) {
   return (
@@ -135,6 +271,16 @@ export function HeroDecor() {
       {SPARKLES.map((sparkle, i) => (
         <Sparkle key={i} sparkle={sparkle} pointer={pointer} />
       ))}
+
+      <div
+        className="absolute inset-0 transition-transform duration-300 ease-out"
+        style={{ transform: `translate(${pointer.x * -18}px, ${pointer.y * -12}px)` }}
+      >
+        {PILLS.map((pill, i) => (
+          <Pill key={i} pill={pill} />
+        ))}
+        <Burst />
+      </div>
     </div>
   )
 }
