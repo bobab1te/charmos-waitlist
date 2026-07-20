@@ -1,4 +1,4 @@
-import { Heart, Hash, Sparkles as SparklesIcon } from 'lucide-react'
+import { CalendarCheck, Heart, Hash, Sparkles as SparklesIcon, Users } from 'lucide-react'
 import { useScrollProgress } from '#/hooks/useScrollProgress'
 import { usePointerParallax } from '#/hooks/usePointerParallax'
 
@@ -105,6 +105,34 @@ const PILLS: Pill[] = [
     driftX: 8,
     driftY: 8,
   },
+  {
+    top: '5%',
+    left: '9%',
+    label: 'collab-ready',
+    icon: Users,
+    bg: 'var(--charm-pink)',
+    textColor: 'var(--charm-ink)',
+    rotate: -5,
+    depth: 24,
+    duration: 19,
+    delay: 1.8,
+    driftX: 9,
+    driftY: -7,
+  },
+  {
+    top: '7%',
+    right: '11%',
+    label: 'on-time',
+    icon: CalendarCheck,
+    bg: 'var(--charm-lavender)',
+    textColor: 'var(--charm-ink)',
+    rotate: 7,
+    depth: 18,
+    duration: 15,
+    delay: 0.6,
+    driftX: -9,
+    driftY: -6,
+  },
 ]
 
 const BURST = {
@@ -112,7 +140,7 @@ const BURST = {
   right: '5%',
   label: 'Effortless',
   bg: 'var(--charm-lavender-deep)',
-  textColor: '#fff8fb',
+  textColor: 'var(--charm-ink)',
   rotate: -8,
   depth: 22,
   duration: 18,
@@ -137,8 +165,14 @@ function Pill({ pill }: { pill: Pill }) {
         }
       >
         <div
-          className="flex items-center gap-1.5 rounded-full px-3.5 py-2 shadow-lg"
-          style={{ background: pill.bg, color: pill.textColor, transform: `rotate(${pill.rotate}deg)` }}
+          className="charm-badge-glass flex items-center gap-1.5 rounded-full px-3.5 py-2"
+          style={
+            {
+              '--badge-tint': pill.bg,
+              color: pill.textColor,
+              transform: `rotate(${pill.rotate}deg)`,
+            } as React.CSSProperties
+          }
         >
           <Icon className="h-3.5 w-3.5 shrink-0" strokeWidth={2.5} />
           <span className="whitespace-nowrap text-xs font-bold sm:text-sm">{pill.label}</span>
@@ -166,8 +200,14 @@ function Burst() {
           className="relative flex h-24 w-24 items-center justify-center"
           style={{ transform: `rotate(${BURST.rotate}deg)` }}
         >
-          <div className="absolute inset-0 rounded-[30%]" style={{ background: BURST.bg }} />
-          <div className="absolute inset-0 rotate-45 rounded-[30%]" style={{ background: BURST.bg }} />
+          <div
+            className="charm-badge-glass absolute inset-0 rounded-[30%]"
+            style={{ '--badge-tint': BURST.bg } as React.CSSProperties}
+          />
+          <div
+            className="charm-badge-glass absolute inset-0 rotate-45 rounded-[30%]"
+            style={{ '--badge-tint': BURST.bg } as React.CSSProperties}
+          />
           <span
             className="relative z-10 font-display text-sm font-bold italic"
             style={{ color: BURST.textColor }}
