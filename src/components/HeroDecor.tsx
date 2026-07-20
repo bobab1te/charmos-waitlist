@@ -23,6 +23,19 @@ const CLOUDS: Cloud[] = [
   { top: '10%', right: '8%', size: 46, color: 'var(--charm-lavender)', opacity: 0.5, depth: 10, duration: 21, delay: 0.6, driftX: -8, driftY: 5 },
 ]
 
+type Sparkle = { top: string; left: string; size: number; color: string; depth: number; duration: number; delay: number }
+
+const SPARKLES: Sparkle[] = [
+  { top: '14%', left: '20%', size: 12, color: '#ffffff', depth: 20, duration: 2.8, delay: 0 },
+  { top: '10%', left: '72%', size: 9, color: '#ffffff', depth: 28, duration: 3.4, delay: 0.9 },
+  { top: '30%', left: '10%', size: 8, color: '#fff2c2', depth: 14, duration: 3.1, delay: 1.6 },
+  { top: '26%', left: '88%', size: 11, color: '#ffffff', depth: 24, duration: 2.6, delay: 0.4 },
+  { top: '46%', left: '6%', size: 10, color: '#ffffff', depth: 18, duration: 3.6, delay: 2.1 },
+  { top: '50%', left: '92%', size: 8, color: '#f6d9ea', depth: 22, duration: 2.9, delay: 1.1 },
+  { top: '62%', left: '16%', size: 9, color: '#ffffff', depth: 16, duration: 3.2, delay: 0.7 },
+  { top: '64%', left: '80%', size: 12, color: '#ffffff', depth: 30, duration: 2.5, delay: 1.9 },
+]
+
 function CloudShape({ cloud }: { cloud: Cloud }) {
   return (
     <div className="absolute" style={{ top: cloud.top, bottom: cloud.bottom, left: cloud.left, right: cloud.right }}>
@@ -52,6 +65,25 @@ function CloudShape({ cloud }: { cloud: Cloud }) {
   )
 }
 
+function Sparkle({ sparkle, pointer }: { sparkle: Sparkle; pointer: { x: number; y: number } }) {
+  return (
+    <div
+      className="absolute charm-twinkle transition-transform duration-300 ease-out"
+      style={{
+        top: sparkle.top,
+        left: sparkle.left,
+        animationDuration: `${sparkle.duration}s`,
+        animationDelay: `${sparkle.delay}s`,
+        transform: `translate(${pointer.x * -sparkle.depth}px, ${pointer.y * -sparkle.depth}px)`,
+      }}
+    >
+      <svg width={sparkle.size} height={sparkle.size} viewBox="0 0 24 24" fill={sparkle.color} aria-hidden="true">
+        <path d="M12 0 L14.2 9.8 L24 12 L14.2 14.2 L12 24 L9.8 14.2 L0 12 L9.8 9.8 Z" />
+      </svg>
+    </div>
+  )
+}
+
 export function HeroDecor() {
   const progress = useScrollProgress()
   const pointer = usePointerParallax()
@@ -59,24 +91,12 @@ export function HeroDecor() {
 
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true" style={{ opacity: fade }}>
-      {/* outer glow halo */}
+      {/* soft glow behind the CharmOS title/logo — kept subtle so text contrast holds up */}
       <div
-        className="absolute left-1/2 top-[20%] h-[54vh] w-[54vh] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl charm-sun-pulse"
+        className="absolute left-1/2 top-[24%] h-[26vh] w-[50vh] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
         style={{
-          background: 'radial-gradient(circle, #fff3c4 0%, #ffdd8a 45%, transparent 72%)',
-          opacity: 0.85 * (1 - progress * 0.6),
-        }}
-      />
-
-      {/* solid glowing sun sphere */}
-      <div
-        className="absolute left-1/2 top-[20%] h-[26vh] w-[26vh] -translate-x-1/2 -translate-y-1/2 rounded-full"
-        style={{
-          background:
-            'radial-gradient(circle at 34% 30%, #fffef4 0%, #ffedb0 26%, #ffd876 50%, #f7b955 72%, #ee9f4d 100%)',
-          boxShadow: '0 0 90px 22px rgba(255, 205, 120, 0.4)',
-          opacity: 1 - progress * 0.5,
-          transform: `translate(calc(-50% + ${pointer.x * -4}px), calc(-50% + ${pointer.y * -3}px))`,
+          background: 'radial-gradient(ellipse, #fff6da 0%, #ffedb0 45%, transparent 75%)',
+          opacity: 0.55 * (1 - progress * 0.6),
         }}
       />
 
@@ -96,6 +116,10 @@ export function HeroDecor() {
           <CloudShape key={i} cloud={cloud} />
         ))}
       </div>
+
+      {SPARKLES.map((sparkle, i) => (
+        <Sparkle key={i} sparkle={sparkle} pointer={pointer} />
+      ))}
     </div>
   )
 }
