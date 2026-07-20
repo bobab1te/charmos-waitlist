@@ -1,84 +1,53 @@
 import { useScrollProgress } from '#/hooks/useScrollProgress'
 import { usePointerParallax } from '#/hooks/usePointerParallax'
 
-type Puff = {
+type Cloud = {
   top?: string
   bottom?: string
   left?: string
   right?: string
   size: number
   color: string
+  opacity: number
+  depth: number
   duration: number
   delay: number
   driftX: number
   driftY: number
-  depth: number
 }
 
-const PUFFS: Puff[] = [
-  { top: '8%', left: '4%', size: 34, color: 'var(--charm-pink-deep)', duration: 16, delay: 0, driftX: 16, driftY: -14, depth: 18 },
-  { top: '14%', right: '6%', size: 30, color: 'var(--charm-lavender-deep)', duration: 19, delay: 1.5, driftX: -18, driftY: -10, depth: 24 },
-  { bottom: '20%', left: '8%', size: 26, color: 'var(--charm-blue-deep)', duration: 21, delay: 3, driftX: 14, driftY: 12, depth: 14 },
-  { bottom: '10%', right: '10%', size: 28, color: 'var(--charm-yellow)', duration: 17, delay: 0.8, driftX: -12, driftY: 16, depth: 20 },
+const CLOUDS: Cloud[] = [
+  { bottom: '-6%', left: '-4%', size: 92, color: '#ffffff', opacity: 0.85, depth: 26, duration: 20, delay: 0, driftX: 10, driftY: -6 },
+  { bottom: '-8%', right: '-5%', size: 108, color: '#ffffff', opacity: 0.8, depth: 32, duration: 23, delay: 1.2, driftX: -12, driftY: -8 },
+  { top: '6%', left: '2%', size: 54, color: 'var(--charm-lavender)', opacity: 0.55, depth: 12, duration: 18, delay: 2, driftX: 8, driftY: 6 },
+  { top: '10%', right: '8%', size: 46, color: 'var(--charm-lavender)', opacity: 0.5, depth: 10, duration: 21, delay: 0.6, driftX: -8, driftY: 5 },
 ]
 
-type Sparkle = { top: string; left: string; size: number; color: string; duration: number; delay: number }
-
-const SPARKLES: Sparkle[] = [
-  { top: '20%', left: '18%', size: 14, color: 'var(--charm-pink-deep)', duration: 3.2, delay: 0 },
-  { top: '32%', left: '78%', size: 10, color: 'var(--charm-lavender-deep)', duration: 2.6, delay: 0.6 },
-  { top: '66%', left: '14%', size: 12, color: 'var(--charm-blue-deep)', duration: 3.6, delay: 1.2 },
-  { top: '72%', left: '84%', size: 16, color: 'var(--charm-pink-deep)', duration: 2.9, delay: 0.3 },
-  { top: '10%', left: '52%', size: 9, color: 'var(--charm-yellow)', duration: 3.1, delay: 1.8 },
-  { top: '84%', left: '48%', size: 11, color: 'var(--charm-lavender-deep)', duration: 2.7, delay: 2.1 },
-]
-
-function CloudPuff({ puff }: { puff: Puff }) {
-  const vh = `${puff.size}vh`
+function CloudShape({ cloud }: { cloud: Cloud }) {
   return (
-    <div
-      className="absolute"
-      style={{ top: puff.top, bottom: puff.bottom, left: puff.left, right: puff.right }}
-    >
+    <div className="absolute" style={{ top: cloud.top, bottom: cloud.bottom, left: cloud.left, right: cloud.right }}>
       <div
         className="charm-float"
         style={
           {
-            animationDuration: `${puff.duration}s`,
-            animationDelay: `${puff.delay}s`,
-            '--drift-x': `${puff.driftX}px`,
-            '--drift-y': `${puff.driftY}px`,
+            animationDuration: `${cloud.duration}s`,
+            animationDelay: `${cloud.delay}s`,
+            '--drift-x': `${cloud.driftX}px`,
+            '--drift-y': `${cloud.driftY}px`,
           } as React.CSSProperties
         }
       >
         <div
-          className="rounded-full blur-2xl"
-          style={{
-            width: vh,
-            height: vh,
-            background: `radial-gradient(circle, ${puff.color} 0%, transparent 72%)`,
-            opacity: 0.55,
-          }}
+          className="charm-cloud"
+          style={
+            {
+              fontSize: `${cloud.size}px`,
+              '--cloud-color': cloud.color,
+              opacity: cloud.opacity,
+            } as React.CSSProperties
+          }
         />
       </div>
-    </div>
-  )
-}
-
-function Sparkle({ sparkle }: { sparkle: Sparkle }) {
-  return (
-    <div
-      className="absolute charm-twinkle"
-      style={{
-        top: sparkle.top,
-        left: sparkle.left,
-        animationDuration: `${sparkle.duration}s`,
-        animationDelay: `${sparkle.delay}s`,
-      }}
-    >
-      <svg width={sparkle.size} height={sparkle.size} viewBox="0 0 24 24" fill={sparkle.color} aria-hidden="true">
-        <path d="M12 0 L14.2 9.8 L24 12 L14.2 14.2 L12 24 L9.8 14.2 L0 12 L9.8 9.8 Z" />
-      </svg>
     </div>
   )
 }
@@ -90,38 +59,41 @@ export function HeroDecor() {
 
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true" style={{ opacity: fade }}>
-      {/* sun glow anchor */}
+      {/* outer glow halo */}
       <div
-        className="absolute left-1/2 top-[18%] h-[42vh] w-[42vh] -translate-x-1/2 rounded-full blur-3xl"
+        className="absolute left-1/2 top-[20%] h-[54vh] w-[54vh] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl charm-sun-pulse"
         style={{
-          background: 'radial-gradient(circle, #fffdf3 0%, #fff2c2 55%, transparent 75%)',
-          opacity: 0.9 * (1 - progress * 0.6),
+          background: 'radial-gradient(circle, #fff3c4 0%, #ffdd8a 45%, transparent 72%)',
+          opacity: 0.85 * (1 - progress * 0.6),
+        }}
+      />
+
+      {/* solid glowing sun sphere */}
+      <div
+        className="absolute left-1/2 top-[20%] h-[26vh] w-[26vh] -translate-x-1/2 -translate-y-1/2 rounded-full"
+        style={{
+          background:
+            'radial-gradient(circle at 34% 30%, #fffef4 0%, #ffedb0 26%, #ffd876 50%, #f7b955 72%, #ee9f4d 100%)',
+          boxShadow: '0 0 90px 22px rgba(255, 205, 120, 0.4)',
+          opacity: 1 - progress * 0.5,
+          transform: `translate(calc(-50% + ${pointer.x * -4}px), calc(-50% + ${pointer.y * -3}px))`,
         }}
       />
 
       <div
         className="absolute inset-0 transition-transform duration-300 ease-out"
-        style={{ transform: `translate(${pointer.x * -10}px, ${pointer.y * -8}px)` }}
+        style={{ transform: `translate(${pointer.x * -12}px, ${pointer.y * -8}px)` }}
       >
-        {PUFFS.filter((_, i) => i % 2 === 0).map((puff, i) => (
-          <CloudPuff key={i} puff={puff} />
+        {CLOUDS.filter((c) => c.depth <= 15).map((cloud, i) => (
+          <CloudShape key={i} cloud={cloud} />
         ))}
       </div>
       <div
         className="absolute inset-0 transition-transform duration-300 ease-out"
-        style={{ transform: `translate(${pointer.x * -18}px, ${pointer.y * -14}px)` }}
+        style={{ transform: `translate(${pointer.x * -26}px, ${pointer.y * -16}px)` }}
       >
-        {PUFFS.filter((_, i) => i % 2 === 1).map((puff, i) => (
-          <CloudPuff key={i} puff={puff} />
-        ))}
-      </div>
-
-      <div
-        className="absolute inset-0 transition-transform duration-300 ease-out"
-        style={{ transform: `translate(${pointer.x * -6}px, ${pointer.y * -5}px)` }}
-      >
-        {SPARKLES.map((sparkle, i) => (
-          <Sparkle key={i} sparkle={sparkle} />
+        {CLOUDS.filter((c) => c.depth > 15).map((cloud, i) => (
+          <CloudShape key={i} cloud={cloud} />
         ))}
       </div>
     </div>
