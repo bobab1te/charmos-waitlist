@@ -1,5 +1,5 @@
 import { ChevronDown } from 'lucide-react'
-import { SunGlow } from '#/components/SunGlow'
+import { HeroDecor } from '#/components/HeroDecor'
 
 function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -8,7 +8,7 @@ function scrollToId(id: string) {
 export function HeroSection() {
   return (
     <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 py-16 text-center">
-      <SunGlow />
+      <HeroDecor />
 
       <div className="relative z-10 flex flex-col items-center rounded-3xl px-6 py-8 backdrop-blur-[2px] sm:px-10">
         <img src="/charm-cloud.png" alt="CharmOS" className="mb-6 h-32 w-32" />

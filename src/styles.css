@@ -187,6 +187,49 @@ body {
     0 4px 14px rgba(0, 0, 0, 0.2);
 }
 
+/* ---------- Hero decorative background (clouds, sparkles) ---------- */
+
+@keyframes charm-float {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(var(--drift-x, 12px), var(--drift-y, -14px)) rotate(2deg);
+  }
+}
+
+@keyframes charm-twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+.charm-float {
+  animation-name: charm-float;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.charm-twinkle {
+  animation-name: charm-twinkle;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .charm-float,
+  .charm-twinkle {
+    animation: none;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
