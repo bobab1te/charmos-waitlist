@@ -23,7 +23,7 @@ type Cloud = {
 
 const CLOUDS: Cloud[] = [
   {
-    bottom: '-6%',
+    bottom: '3%',
     left: '-4%',
     mobileLeft: '-16%',
     size: 92,
@@ -37,7 +37,7 @@ const CLOUDS: Cloud[] = [
     driftY: -6,
   },
   {
-    bottom: '-8%',
+    bottom: '4%',
     right: '-5%',
     mobileRight: '-16%',
     size: 108,

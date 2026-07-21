@@ -3,6 +3,7 @@ import { CheckCircle2 } from 'lucide-react'
 import { supabase } from '#/lib/supabase'
 import { MultiSelectDropdown } from '#/components/MultiSelectDropdown'
 import { SearchableSelect } from '#/components/SearchableSelect'
+import { SectionDecor } from '#/components/SectionDecor'
 import { COUNTRIES } from '#/lib/countries'
 
 const REASON_OPTIONS = [
@@ -120,7 +121,17 @@ export function FormSection() {
 
   return (
     <section id="waitlist-form" className="relative flex min-h-screen items-center justify-center px-4 py-16">
-      <div className="charm-glass w-full max-w-lg rounded-xl p-8 text-center sm:p-10">
+      <SectionDecor
+        clouds={[
+          { top: '1%', left: '6%', size: 38 },
+          { bottom: '1%', right: '6%', size: 42 },
+        ]}
+        sparkles={[
+          { top: '5%', right: '3%', size: 12 },
+          { bottom: '6%', left: '3%', size: 14 },
+        ]}
+      />
+      <div className="charm-glass relative w-full max-w-lg rounded-xl p-8 text-center sm:p-10">
         <img src="/charm-cloud.png" alt="CharmOS" className="mx-auto mb-4 h-14 w-14" />
 
         <h1 className="font-display text-2xl font-semibold text-foreground sm:text-3xl">CharmOS</h1>
