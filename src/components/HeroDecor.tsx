@@ -152,7 +152,10 @@ const BURST = {
 function Pill({ pill }: { pill: Pill }) {
   const Icon = pill.icon
   return (
-    <div className="absolute" style={{ top: pill.top, bottom: pill.bottom, left: pill.left, right: pill.right }}>
+    <div
+      className="absolute hidden sm:block"
+      style={{ top: pill.top, bottom: pill.bottom, left: pill.left, right: pill.right }}
+    >
       <div
         className="charm-float"
         style={
@@ -184,7 +187,10 @@ function Pill({ pill }: { pill: Pill }) {
 
 function Burst() {
   return (
-    <div className="absolute" style={{ top: BURST.top, bottom: BURST.bottom, left: BURST.left, right: BURST.right }}>
+    <div
+      className="absolute hidden sm:block"
+      style={{ top: BURST.top, bottom: BURST.bottom, left: BURST.left, right: BURST.right }}
+    >
       <div
         className="charm-float"
         style={
