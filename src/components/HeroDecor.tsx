@@ -1,13 +1,17 @@
 import { CalendarCheck, Heart, Hash, Sparkles as SparklesIcon, Users } from 'lucide-react'
 import { useScrollProgress } from '#/hooks/useScrollProgress'
 import { usePointerParallax } from '#/hooks/usePointerParallax'
+import { useIsMobile } from '#/hooks/useIsMobile'
 
 type Cloud = {
   top?: string
   bottom?: string
   left?: string
   right?: string
+  mobileLeft?: string
+  mobileRight?: string
   size: number
+  mobileSize?: number
   color: string
   opacity: number
   depth: number
@@ -18,10 +22,60 @@ type Cloud = {
 }
 
 const CLOUDS: Cloud[] = [
-  { bottom: '-6%', left: '-4%', size: 92, color: '#ffffff', opacity: 0.85, depth: 26, duration: 20, delay: 0, driftX: 10, driftY: -6 },
-  { bottom: '-8%', right: '-5%', size: 108, color: '#ffffff', opacity: 0.8, depth: 32, duration: 23, delay: 1.2, driftX: -12, driftY: -8 },
-  { top: '6%', left: '2%', size: 54, color: 'var(--charm-lavender)', opacity: 0.55, depth: 12, duration: 18, delay: 2, driftX: 8, driftY: 6 },
-  { top: '10%', right: '8%', size: 46, color: 'var(--charm-lavender)', opacity: 0.5, depth: 10, duration: 21, delay: 0.6, driftX: -8, driftY: 5 },
+  {
+    bottom: '-6%',
+    left: '-4%',
+    mobileLeft: '-16%',
+    size: 92,
+    mobileSize: 46,
+    color: '#ffffff',
+    opacity: 0.85,
+    depth: 26,
+    duration: 20,
+    delay: 0,
+    driftX: 10,
+    driftY: -6,
+  },
+  {
+    bottom: '-8%',
+    right: '-5%',
+    mobileRight: '-16%',
+    size: 108,
+    mobileSize: 50,
+    color: '#ffffff',
+    opacity: 0.8,
+    depth: 32,
+    duration: 23,
+    delay: 1.2,
+    driftX: -12,
+    driftY: -8,
+  },
+  {
+    top: '6%',
+    left: '2%',
+    size: 54,
+    mobileSize: 34,
+    color: 'var(--charm-lavender)',
+    opacity: 0.55,
+    depth: 12,
+    duration: 18,
+    delay: 2,
+    driftX: 8,
+    driftY: 6,
+  },
+  {
+    top: '10%',
+    right: '8%',
+    size: 46,
+    mobileSize: 30,
+    color: 'var(--charm-lavender)',
+    opacity: 0.5,
+    depth: 10,
+    duration: 21,
+    delay: 0.6,
+    driftX: -8,
+    driftY: 5,
+  },
 ]
 
 type Sparkle = { top: string; left: string; size: number; color: string; depth: number; duration: number; delay: number }
@@ -226,9 +280,14 @@ function Burst() {
   )
 }
 
-function CloudShape({ cloud }: { cloud: Cloud }) {
+function CloudShape({ cloud, isMobile }: { cloud: Cloud; isMobile: boolean }) {
+  const size = isMobile && cloud.mobileSize ? cloud.mobileSize : cloud.size
+  const left = isMobile && cloud.mobileLeft ? cloud.mobileLeft : cloud.left
+  const right = isMobile && cloud.mobileRight ? cloud.mobileRight : cloud.right
+  const color = isMobile ? '#ffffff' : cloud.color
+
   return (
-    <div className="absolute" style={{ top: cloud.top, bottom: cloud.bottom, left: cloud.left, right: cloud.right }}>
+    <div className="absolute" style={{ top: cloud.top, bottom: cloud.bottom, left, right }}>
       <div
         className="charm-float"
         style={
@@ -244,8 +303,8 @@ function CloudShape({ cloud }: { cloud: Cloud }) {
           className="charm-cloud"
           style={
             {
-              fontSize: `${cloud.size}px`,
-              '--cloud-color': cloud.color,
+              fontSize: `${size}px`,
+              '--cloud-color': color,
               opacity: cloud.opacity,
             } as React.CSSProperties
           }
@@ -284,6 +343,7 @@ function Sparkle({ sparkle, pointer }: { sparkle: Sparkle; pointer: { x: number;
 export function HeroDecor() {
   const progress = useScrollProgress()
   const pointer = usePointerParallax()
+  const isMobile = useIsMobile()
   const fade = 1 - progress * 0.7
 
   return (
@@ -302,7 +362,7 @@ export function HeroDecor() {
         style={{ transform: `translate(${pointer.x * -12}px, ${pointer.y * -8}px)` }}
       >
         {CLOUDS.filter((c) => c.depth <= 15).map((cloud, i) => (
-          <CloudShape key={i} cloud={cloud} />
+          <CloudShape key={i} cloud={cloud} isMobile={isMobile} />
         ))}
       </div>
       <div
@@ -310,7 +370,7 @@ export function HeroDecor() {
         style={{ transform: `translate(${pointer.x * -26}px, ${pointer.y * -16}px)` }}
       >
         {CLOUDS.filter((c) => c.depth > 15).map((cloud, i) => (
-          <CloudShape key={i} cloud={cloud} />
+          <CloudShape key={i} cloud={cloud} isMobile={isMobile} />
         ))}
       </div>
 
