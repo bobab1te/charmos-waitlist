@@ -8,9 +8,9 @@ function TikTokIcon({ className }: { className?: string }) {
   )
 }
 
-const SOCIAL_LINKS = [
-  { href: 'https://www.tiktok.com/@ziqingsdiary', label: 'TikTok', Icon: TikTokIcon },
-  { href: 'https://www.instagram.com/ziqingsdiary/', label: 'Instagram', Icon: Instagram },
+const SOCIAL_ICONS = [
+  { label: 'TikTok', Icon: TikTokIcon },
+  { label: 'Instagram', Icon: Instagram },
 ]
 
 export function BioSection() {
@@ -25,17 +25,14 @@ export function BioSection() {
           />
 
           <div className="flex gap-2">
-            {SOCIAL_LINKS.map(({ href, label, Icon }) => (
-              <a
+            {SOCIAL_ICONS.map(({ label, Icon }) => (
+              <div
                 key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={label}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/15 text-primary transition-all duration-200 ease-out hover:scale-110 hover:bg-primary hover:text-primary-foreground active:scale-95"
+                aria-hidden="true"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/15 text-primary"
               >
                 <Icon className="h-4 w-4" />
-              </a>
+              </div>
             ))}
           </div>
         </div>
