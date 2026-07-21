@@ -1,5 +1,4 @@
 import { Instagram } from 'lucide-react'
-import { SectionDecor } from '#/components/SectionDecor'
 
 function TikTokIcon({ className }: { className?: string }) {
   return (
@@ -17,17 +16,7 @@ const SOCIAL_ICONS = [
 export function BioSection() {
   return (
     <section id="bio" className="relative mx-auto max-w-2xl px-4 py-24">
-      <SectionDecor
-        clouds={[
-          { top: '1.5%', left: '10%', size: 36 },
-          { bottom: '1.5%', right: '8%', size: 32 },
-        ]}
-        sparkles={[
-          { top: '8%', left: '3%', size: 12 },
-          { bottom: '10%', right: '4%', size: 14 },
-        ]}
-      />
-      <div className="charm-glass relative mx-auto flex flex-col items-center gap-5 rounded-xl p-8 text-center sm:flex-row sm:items-start sm:p-10 sm:text-left">
+      <div className="charm-glass mx-auto flex flex-col items-center gap-5 rounded-xl p-8 text-center sm:flex-row sm:items-start sm:p-10 sm:text-left">
         <div className="flex shrink-0 flex-col items-center gap-3">
           <img
             src="/bio-photo.jpg"
