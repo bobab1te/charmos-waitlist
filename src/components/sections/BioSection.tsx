@@ -40,7 +40,7 @@ export function BioSection() {
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-primary">For creators, by a creator.</p>
           <p className="mt-3 text-sm leading-relaxed text-foreground sm:text-base">
-            As a micro influencer @ziqingsdiary (10k combined) and full time student/intern, I'm constantly juggling
+            As a micro influencer (10k combined) and full time student/intern, I'm constantly juggling
             work, making videos, and dealing with other commitments. Content creation is one of my passions, but it
             began to feel like a chore. I want to ensure creators never feel this way, and focus on what we love:
             creating!
